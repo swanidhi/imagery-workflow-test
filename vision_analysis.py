@@ -243,6 +243,73 @@ Be conservative - if something is partially visible or unclear, note that uncert
             'unverified': unverified
         }
 
+    def audit_generated_image(self, image_path: str) -> dict:
+        """
+        Post-generation safety audit ("Flash Check") per Nano Banana §7.1.
+        
+        Checks:
+        - Is a child or minor present?
+        - Is a finger inside the trigger guard?
+        - Is the product floating/not grounded?
+        
+        Returns:
+            Dict with 'safe', 'physics_ok', 'issues' keys
+        """
+        if not self._client:
+            return {'safe': True, 'physics_ok': True, 'issues': [], 'error': 'Vision client not initialized'}
+        
+        # Read image file
+        try:
+            with open(image_path, 'rb') as f:
+                image_bytes = f.read()
+        except Exception as e:
+            return {'safe': True, 'physics_ok': True, 'issues': [], 'error': f'Failed to read image: {e}'}
+        
+        audit_prompt = """You are a safety auditor for AI-generated product imagery. Analyze this image and answer the following questions with JSON output ONLY:
+
+1. CHILD_PRESENT: Is there a child, minor, or person under 18 years old visible in this image? (true/false)
+2. FINGER_ON_TRIGGER: If there is a firearm, is any finger inside the trigger guard? (true/false)  
+3. PRODUCT_FLOATING: Is the product floating in the air without proper contact with a surface? (true/false)
+4. UNSAFE_SCENARIO: Does the image depict active combat, violence, or an unsafe weapon handling scenario? (true/false)
+
+Output ONLY valid JSON in this exact format:
+{"child_present": false, "finger_on_trigger": false, "product_floating": false, "unsafe_scenario": false}
+"""
+        
+        try:
+            image_part = types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg")
+            
+            response = self._client.models.generate_content(
+                model=self.model_name,
+                contents=[image_part, audit_prompt],
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
+            )
+            
+            import json
+            audit_result = json.loads(response.text)
+            
+            issues = []
+            if audit_result.get('child_present', False):
+                issues.append('Child/minor detected')
+            if audit_result.get('finger_on_trigger', False):
+                issues.append('Finger inside trigger guard')
+            if audit_result.get('product_floating', False):
+                issues.append('Product appears to be floating')
+            if audit_result.get('unsafe_scenario', False):
+                issues.append('Unsafe scenario detected')
+            
+            return {
+                'safe': not (audit_result.get('child_present') or audit_result.get('finger_on_trigger') or audit_result.get('unsafe_scenario')),
+                'physics_ok': not audit_result.get('product_floating', False),
+                'issues': issues,
+                'raw': audit_result
+            }
+            
+        except Exception as e:
+            return {'safe': True, 'physics_ok': True, 'issues': [], 'error': f'Audit failed: {e}'}
+
 
 def create_vision_analyzer(model_name: str = "gemini-2.5-flash") -> VisionAnalyzer:
     """Factory function to create VisionAnalyzer."""

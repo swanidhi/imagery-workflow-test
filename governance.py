@@ -49,8 +49,26 @@ class GovernanceEngine:
         category = self.get_scene_category(class_description)
         templates = self._rules.get('scene_templates', {}).get(category, {})
         
-        template_key = f'lifestyle_{variation}'
-        return templates.get(template_key, templates.get('lifestyle_1', ''))
+        # New Schema: 'options' list
+        options = templates.get('options', [])
+        
+        if not options:
+            # Fallback to old schema if needed
+            template_key = f'lifestyle_{variation}'
+            return templates.get(template_key, '')
+
+        # Return ALL options if requested (special variation 999 or just handling list upstream)
+        # But for backward compatibility with calls expecting a string, we return a random choice 
+        # UNLESS the caller asked for the list (which we haven't implemented a separate method for yet)
+        # Let's create a get_scene_options method instead and keep this for random fallback.
+        import random
+        return random.choice(options)
+
+    def get_scene_options(self, class_description: str) -> list[str]:
+        """Get all available scene options for a class."""
+        category = self.get_scene_category(class_description)
+        templates = self._rules.get('scene_templates', {}).get(category, {})
+        return templates.get('options', [])
     
     def get_class_overrides(self, class_description: str) -> dict:
         """Get class-specific rule overrides."""

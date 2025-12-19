@@ -184,9 +184,29 @@ class ProductImageryWorkflowV2:
         if verbose:
             print(f"[V2][4/6] Composing prompts (DoP language, Identity Lock)")
         
+        # Get all available scene options for this class
+        all_options = self.governance.get_scene_options(class_desc)
+        
+        # DIVERSITY FIX: Pre-select TWO DIFFERENT templates to guarantee variety
+        import random
+        if len(all_options) >= 2:
+            selected_templates = random.sample(all_options, 2)
+            template_1 = selected_templates[0]
+            template_2 = selected_templates[1]
+        elif len(all_options) == 1:
+            template_1 = all_options[0]
+            template_2 = all_options[0]
+        else:
+            template_1 = ""
+            template_2 = ""
+        
+        if verbose:
+            print(f"    Scene 1: {template_1[:60]}...")
+            print(f"    Scene 2: {template_2[:60]}...")
+        
         scene_templates = {
-            'lifestyle_1': self.governance.get_scene_template(class_desc, 1),
-            'lifestyle_2': self.governance.get_scene_template(class_desc, 2),
+            'lifestyle_1': template_1,  # Single pre-selected template (not list)
+            'lifestyle_2': template_2,  # Different pre-selected template
         }
         
         prompts = self.composer.compose_batch_prompts(
@@ -246,9 +266,29 @@ class ProductImageryWorkflowV2:
         # Step 6: Post-generation audit (if enabled)
         if self.post_audit_enabled and result['images']:
             if verbose:
-                print(f"[V2][6/6] Running post-generation safety audit")
-            # TODO: Implement post-generation audit using VisionAnalyzer
-            # This would check generated images for safety violations
+                print(f"[V2][6/6] Running post-generation safety audit (Flash Check)")
+            
+            audit_results = []
+            for image_path in result['images']:
+                audit = self.vision.audit_generated_image(image_path)
+                audit_results.append({
+                    'image': image_path,
+                    'safe': audit.get('safe', True),
+                    'physics_ok': audit.get('physics_ok', True),
+                    'issues': audit.get('issues', [])
+                })
+                
+                if verbose:
+                    status = "✓ PASS" if (audit.get('safe') and audit.get('physics_ok')) else "✗ FAIL"
+                    issues_str = ", ".join(audit.get('issues', [])) if audit.get('issues') else "None"
+                    print(f"    {status}: {Path(image_path).name} | Issues: {issues_str}")
+            
+            result['audit_results'] = audit_results
+            
+            # Flag any failed audits
+            failed_audits = [a for a in audit_results if not a['safe'] or not a['physics_ok']]
+            if failed_audits:
+                result['audit_warnings'] = len(failed_audits)
         else:
             if verbose:
                 print(f"[V2][6/6] Post-generation audit: Skipped")

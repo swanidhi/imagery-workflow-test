@@ -158,8 +158,14 @@ export default function ComparisonModal({ sourceImages, initialSourceIndex, aiIm
                         <span className="bg-black/70 px-3 py-1 text-xs rounded-full text-white pointer-events-none">
                             Generated ({aiIndex + 1}/{aiImages.length})
                         </span>
+                        <span className={`px-2 py-1 text-[10px] rounded uppercase font-bold text-white pointer-events-none ${currentAiImg?.engine_version === 'v2_nanobananapro'
+                                ? 'bg-purple-600'
+                                : 'bg-blue-600'
+                            }`}>
+                            {currentAiImg?.engine_version === 'v2_nanobananapro' ? 'V2' : 'V1'}
+                        </span>
                         <span className="bg-primary/80 px-2 py-1 text-[10px] rounded uppercase font-bold text-white pointer-events-none">
-                            {currentAiImg?.model_id}
+                            {currentAiImg?.model_id?.split('-').pop()}
                         </span>
                     </div>
 

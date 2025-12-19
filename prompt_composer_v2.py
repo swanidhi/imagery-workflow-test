@@ -68,18 +68,54 @@ Lighting and shadows must be consistent with a single light source."""
         
         # Build identity locking instruction for unverified features
         identity_lock = self._build_identity_lock(visible_features)
-        
+
         # Select face avoidance strategy
         face_strategy = self._select_face_avoidance(governance, variation)
         
+        # Handle Smart Context Selection if scene_template is a list/options
+        scene_instruction = scene_template
+        if isinstance(scene_template, list):
+            options_text = "\n".join([f"- {opt}" for opt in scene_template])
+            
+            # Build product attributes summary for context selection (Nano Banana §6.3)
+            visible_attrs = visible_features.get('visible_features', [])
+            attr_summary = []
+            for feat in visible_attrs[:8]:
+                attr = feat.get('attribute', '')
+                val = feat.get('value', '')
+                if attr and val:
+                    attr_summary.append(f"{attr}: {val}")
+            
+            product_attrs_text = ", ".join(attr_summary) if attr_summary else "standard product"
+            product_class = product.get('class_description', '')
+            product_brand = product.get('brand', '')
+            
+            scene_instruction = f"""
+CONTEXTUAL REASONING TASK:
+Product Attributes: {product_attrs_text}
+Product Class: {product_class}
+Brand: {product_brand}
+
+Based on these attributes, select the SINGLE most appropriate setting from the following options:
+{options_text}
+
+Example reasoning:
+- If wood stock/heritage finish → select Heritage/Western context
+- If polymer/tactical → select Tactical/Modern context
+- If competition-grade → select Range/Sport context
+
+Render the scene using the context that best matches this product's aesthetic and intended use case.
+"""
+
         # Build main prompt
         positive_prompt = self._construct_positive_prompt(
             product_desc=product_desc,
-            scene_template=scene_template,
+            scene_template=scene_instruction,
             face_strategy=face_strategy,
             identity_lock=identity_lock,
             required_elements=governance.get('required_elements', [])
         )
+
         
         # Build negative prompt
         negative_prompt = self._construct_negative_prompt(

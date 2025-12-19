@@ -162,11 +162,15 @@ class ImageGeneratorV2:
             contents.append(full_prompt)
             
             # Configure generation with V2 enhancements
+            # Note: Gemini 3 Pro Image has "Thinking" always on, but we can influence
+            # the budget/effort via thinking_config (per Nano Banana research §2.2)
             config = types.GenerateContentConfig(
                 response_modalities=['IMAGE', 'TEXT'],
                 system_instruction=self._system_instruction,
-                # Note: Thinking is always enabled for gemini-3-pro-image-preview
-                # and cannot be disabled via API
+                # Explicitly set thinking budget for enhanced reasoning (safety, context selection)
+                thinking_config=types.ThinkingConfig(
+                    thinking_budget=1024  # Medium reasoning effort
+                ),
             )
             
             # Generate

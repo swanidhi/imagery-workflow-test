@@ -33,12 +33,12 @@ api:
 # Generation Engine Toggle (V1 vs V2)
 # =============================================================================
 generation:
-  engine: "v1"  # Options: "v1" (current), "v2_nanobananapro" (enhanced)
+  engine: "v2_nanobananapro"  # Options: "v1" (current), "v2_nanobananapro" (enhanced)
   
   # V2-specific settings (only used when engine="v2_nanobananapro")
   v2:
     system_instruction_file: "safety_constitution.yaml"
     aspect_ratio: "1:1"
     image_size: "1K"  # Options: 1K, 2K, 4K
-    post_generation_audit: false  # Enable to auto-verify safety
+    post_generation_audit: true  # Enable to auto-verify safety (Flash Check)
 

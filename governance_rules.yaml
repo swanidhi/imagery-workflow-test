@@ -56,28 +56,46 @@ universal:
 # Scene Templates by Category
 scene_templates:
   handguns:
-    lifestyle_1: "elegant display on weathered wooden desk surface, soft natural morning light through window, cleaning cloth and maintenance kit nearby, collector's presentation style, shallow depth of field"
-    lifestyle_2: "range bag context partially visible, professional training environment, ear protection nearby, shallow depth of field with product in sharp focus, clean indoor range aesthetic"
+    options:
+      - "Heritage/Classic: elegant display on a mahogany executive desk, subtle leather blotter, soft ambient indoor lighting, premium collector aesthetic"
+      - "Carry/Modern: resting on a granite countertop, morning coffee vibes, soft natural light streaming from side, everyday carry context"
+      - "Tactical/Duty: inside a high-quality pelican-style hard case partially open, showing custom foam insert, tactical yet professional gear context"
+      - "Range/Sport: outdoor shooting bench, safety glasses and ear protection neatly arranged nearby, focus on responsible training, sunny day"
+      - "Maintenance: clean gun mat workspace, brass cleaning rod visible in background, technical appreciation of mechanics"
   
   rifles:
-    lifestyle_1: "hunting lodge setting, leaning against rustic log wall, amber evening light through window, leather accessories nearby, outdoorsman heritage aesthetic"
-    lifestyle_2: "precision shooting bench, bipod deployed on stable rest, target range backdrop softly blurred, dawn lighting, technical sport presentation"
+    options:
+      - "Heritage/Hunt: hunting lodge setting, leaning against rustic log wall, amber evening light through window, leather accessories nearby"
+      - "Precision/Sport: concrete shooting bench, bipod deployed on stable rest, target range backdrop softly blurred, technical sport presentation"
+      - "Field/Stalk: perched on a mossy rock overlooking a blurry alpine valley, overcast dramatic lighting, mountain hunt context"
+      - "Truck/Utility: resting on the open tailgate of a truck, field gear nearby, golden hour sunlight, harvest preparation vibe"
   
   shotguns:
-    lifestyle_1: "waterfowl hunting context, tall grass marsh setting, dawn mist atmosphere, hunting vest draped nearby, outdoor heritage aesthetic, natural earthy tones"
-    lifestyle_2: "sporting clays station, break-open display position showing craftsmanship, blue skies background, competitive shooting atmosphere"
+    options:
+      - "Waterfowl/Field: waterfowl hunting context, tall grass marsh setting, dawn mist atmosphere, hunting vest draped nearby"
+      - "Upland/Field: resting against a wooden fence post in tall dry grass, bright midday sun, pheasant hunting context"
+      - "Sport/Clay: sporting clays station, break-open display position, blue skies background, competitive shooting atmosphere"
+      - "Home/Defense: leaning in a clean mudroom entryway corner, boots and vest nearby, safe home protection context, neutral lighting"
   
   revolvers:
-    lifestyle_1: "western heritage display, leather holster nearby, aged wood surface, warm tungsten lighting, americana collector aesthetic"
-    lifestyle_2: "precision display case with velvet lining, soft museum-quality lighting, heritage craftsmanship focus"
+    options:
+      - "Western/Heritage: western heritage display, leather holster nearby, aged wood surface, warm tungsten lighting, americana collector aesthetic"
+      - "Modern/Defense: bedside quick-access safe context (open), dim moody lighting, contemporary home protection"
+      - "Collector/Poker: green felt surface, poker chips scattered out of focus in background, saloon vibe lighting"
+      - "Gallery/Detail: sleek museum display case with velvet lining, soft focused lighting, highlighting craftsmanship"
   
   modern_sporting_rifles:
-    lifestyle_1: "competition shooting bench, modular accessories visible, technical precision aesthetic, clean modern environment"
-    lifestyle_2: "secure display rack, professional training facility context, organized and methodical presentation"
+    options:
+      - "Competition: 3-Gun stage context, blue plastic barrel rest, dynamic angle, bright outdoor range sun"
+      - "Tactical/Professional: schematic workbench mat, disassembled cleaning state, tools arranged, high-tech workshop feel"
+      - "Display/Armory: secure vertical rack, clean professional training facility background, organized and methodical presentation"
+      - "Field/Operator: resting on a tactical gear loadout (plate carrier/bag), muted earth tones, operational readiness vibe"
   
   black_powder:
-    lifestyle_1: "historical display case, antique backdrop with period-appropriate props, warm museum lighting, heritage collector presentation"
-    lifestyle_2: "frontier cabin setting, natural materials, handcrafted aesthetic, traditional craftsmanship focus, soft natural lighting"
+    options:
+      - "Historical/Reenactment: canvas tent background, resting on a folding camp stool, sepia tone grading, civil war era vibe"
+      - "Frontier/Trapper: fur pelt surface, powder horn accessory, snow/winter lighting context, mountain man aesthetic"
+      - "Museum: historical display case, antique backdrop with period-appropriate props, warm museum lighting"
 
 # Class Description to Scene Category Mapping
 class_mapping:
