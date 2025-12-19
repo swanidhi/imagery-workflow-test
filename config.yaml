@@ -3,7 +3,7 @@
 # Model Configuration - USE ACTUAL API MODEL IDs
 models:
   vision_analysis: "gemini-2.5-flash"           # For analyzing ghost images
-  image_generation: "gemini-3-pro-image-preview"      # Actual API model name. Options: gemini-2.0-flash-exp, imagen-3.0-generate-002
+  image_generation: "gemini-3-pro-image-preview"      # Actual API model name
 
 # Image Generation Settings
 image_settings:
@@ -28,3 +28,17 @@ api:
   max_retries: 3
   retry_delay_seconds: 2
   timeout_seconds: 60
+
+# =============================================================================
+# Generation Engine Toggle (V1 vs V2)
+# =============================================================================
+generation:
+  engine: "v1"  # Options: "v1" (current), "v2_nanobananapro" (enhanced)
+  
+  # V2-specific settings (only used when engine="v2_nanobananapro")
+  v2:
+    system_instruction_file: "safety_constitution.yaml"
+    aspect_ratio: "1:1"
+    image_size: "1K"  # Options: 1K, 2K, 4K
+    post_generation_audit: false  # Enable to auto-verify safety
+

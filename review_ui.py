@@ -6,6 +6,7 @@ Serves the Vue/React frontend and provides API endpoints.
 
 import json
 import os
+import yaml
 import threading
 from pathlib import Path
 from flask import Flask, jsonify, send_from_directory, request
@@ -23,6 +24,18 @@ if env_path.exists():
 
 from data_layer import create_data_layer
 from workflow import create_workflow
+from workflow_v2 import create_workflow_v2
+
+# Load config to determine engine
+def load_config():
+    config_path = Path("config.yaml")
+    if config_path.exists():
+        with open(config_path) as f:
+            return yaml.safe_load(f)
+    return {}
+
+config = load_config()
+ENGINE_VERSION = config.get('generation', {}).get('engine', 'v1')
 
 # Configure Flask to serve the React build
 # 'frontend/dist' contains index.html and assets/
@@ -125,12 +138,20 @@ def generate_api():
     if not cupid:
         return jsonify({'success': False, 'error': 'Missing cupid_name'})
     try:
-        wf = create_workflow()
+        # Select workflow based on engine config
+        if ENGINE_VERSION == 'v2_nanobananapro':
+            wf = create_workflow_v2()
+            print(f"[Engine: V2 Nano Banana Pro]")
+        else:
+            wf = create_workflow()
+            print(f"[Engine: V1]")
+        
         # Pass the list of selected URLs to the workflow
         result = wf.run(cupid, verbose=True, selected_ghost_urls=active_sources)
+        result['engine_used'] = ENGINE_VERSION
         return jsonify(result)
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'success': False, 'error': str(e), 'engine_used': ENGINE_VERSION})
 
 @app.route('/output/<path:filename>')
 def serve_image(filename):
