@@ -114,6 +114,7 @@ def get_product(cupid_name):
                         'path': f"{tranche}/{img_name}",
                         'model_id': meta.get('model_id', meta.get('model', 'unknown')),
                         'engine_version': meta.get('engine_version', 'v1'),
+                        'generated_at': meta.get('generated_at', ''),
                         'prompts': meta.get('prompts', {})
                      })
             except Exception as e:

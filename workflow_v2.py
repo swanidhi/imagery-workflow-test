@@ -185,7 +185,16 @@ class ProductImageryWorkflowV2:
             print(f"[V2][4/6] Composing prompts (DoP language, Identity Lock)")
         
         # Get all available scene options for this class
-        all_options = self.governance.get_scene_options(class_desc)
+        all_options, class_mapping_missing = self.governance.get_scene_options(class_desc)
+        
+        # ERROR: Class mapping not found - return error to UI
+        if class_mapping_missing:
+            error_msg = f"CLASS MAPPING MISSING: '{class_desc}' is not defined in governance_rules.yaml. Please add this class to the class_mapping section."
+            result['errors'].append(error_msg)
+            result['class_mapping_missing'] = True
+            if verbose:
+                print(f"    ⚠️  ERROR: {error_msg}")
+            return result
         
         # DIVERSITY FIX: Pre-select TWO DIFFERENT templates to guarantee variety
         import random

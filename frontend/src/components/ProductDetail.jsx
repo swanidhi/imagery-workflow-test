@@ -73,7 +73,18 @@ export default function ProductDetail({ data, onGenerate, onCompare }) {
         <div className="flex-1 flex flex-col h-full bg-background">
             {/* Top Bar */}
             <div className="h-[60px] border-b border-border flex items-center justify-between px-6 bg-surface flex-shrink-0">
-                <h2 className="text-sm font-semibold truncate max-w-xl" title={data.product_name}>{data.product_name}</h2>
+                <div className="flex items-center gap-3">
+                    <h2 className="text-sm font-semibold truncate max-w-md" title={data.product_name}>{data.product_name}</h2>
+                    <button
+                        onClick={() => {
+                            navigator.clipboard.writeText(data.cupid_name);
+                        }}
+                        className="px-2 py-0.5 text-[10px] font-mono bg-zinc-700 hover:bg-zinc-600 text-zinc-300 rounded cursor-pointer transition-colors"
+                        title="Click to copy"
+                    >
+                        {data.cupid_name}
+                    </button>
+                </div>
                 <div className="flex gap-2">
                     <button
                         onClick={() => onCompare(lastClickedIndex, activeGenIndex)}
@@ -212,19 +223,26 @@ export default function ProductDetail({ data, onGenerate, onCompare }) {
                     <div className="flex-1 p-6 overflow-y-auto bg-surface/30">
                         {activeGen && (
                             <div className="flex flex-col h-full">
-                                <div className="flex items-center gap-4 mb-3 border-b border-border pb-2">
-                                    <button
-                                        onClick={() => setPromptTab('positive')}
-                                        className={`text-xs font-bold uppercase pb-1 transition-colors ${promptTab === 'positive' ? 'text-success border-b-2 border-success' : 'text-text-muted hover:text-white'}`}
-                                    >
-                                        Positive Prompt
-                                    </button>
-                                    <button
-                                        onClick={() => setPromptTab('negative')}
-                                        className={`text-xs font-bold uppercase pb-1 transition-colors ${promptTab === 'negative' ? 'text-danger border-b-2 border-danger' : 'text-text-muted hover:text-white'}`}
-                                    >
-                                        Negative Prompt
-                                    </button>
+                                <div className="flex items-center justify-between mb-3 border-b border-border pb-2">
+                                    <div className="flex items-center gap-4">
+                                        <button
+                                            onClick={() => setPromptTab('positive')}
+                                            className={`text-xs font-bold uppercase pb-1 transition-colors ${promptTab === 'positive' ? 'text-success border-b-2 border-success' : 'text-text-muted hover:text-white'}`}
+                                        >
+                                            Positive Prompt
+                                        </button>
+                                        <button
+                                            onClick={() => setPromptTab('negative')}
+                                            className={`text-xs font-bold uppercase pb-1 transition-colors ${promptTab === 'negative' ? 'text-danger border-b-2 border-danger' : 'text-text-muted hover:text-white'}`}
+                                        >
+                                            Negative Prompt
+                                        </button>
+                                    </div>
+                                    {activeGen.generated_at && (
+                                        <span className="text-[10px] text-text-muted font-mono">
+                                            {new Date(activeGen.generated_at).toLocaleString()}
+                                        </span>
+                                    )}
                                 </div>
 
                                 <div className="bg-surface rounded-lg p-3 border border-border flex-1 overflow-y-auto font-mono text-xs text-text-muted bg-black/20 leading-relaxed whitespace-pre-wrap">

@@ -30,10 +30,19 @@ class GovernanceEngine:
         """Get universal rules that apply to all products."""
         return self._rules.get('universal', {})
     
-    def get_scene_category(self, class_description: str) -> str:
-        """Map class description to scene category."""
+    def get_scene_category(self, class_description: str) -> tuple[str, bool]:
+        """
+        Map class description to scene category.
+        
+        Returns:
+            Tuple of (category, is_missing) - is_missing=True if class not found in mapping
+        """
         mapping = self._rules.get('class_mapping', {})
-        return mapping.get(class_description, 'handguns')  # Default to handguns
+        if class_description in mapping:
+            return mapping[class_description], False
+        else:
+            # Return default but flag as missing
+            return 'handguns', True
     
     def get_scene_template(self, class_description: str, variation: int) -> str:
         """
@@ -46,7 +55,7 @@ class GovernanceEngine:
         Returns:
             Scene template string
         """
-        category = self.get_scene_category(class_description)
+        category, _ = self.get_scene_category(class_description)
         templates = self._rules.get('scene_templates', {}).get(category, {})
         
         # New Schema: 'options' list
@@ -64,11 +73,16 @@ class GovernanceEngine:
         import random
         return random.choice(options)
 
-    def get_scene_options(self, class_description: str) -> list[str]:
-        """Get all available scene options for a class."""
-        category = self.get_scene_category(class_description)
+    def get_scene_options(self, class_description: str) -> tuple[list[str], bool]:
+        """
+        Get all available scene options for a class.
+        
+        Returns:
+            Tuple of (options_list, is_class_missing)
+        """
+        category, is_missing = self.get_scene_category(class_description)
         templates = self._rules.get('scene_templates', {}).get(category, {})
-        return templates.get('options', [])
+        return templates.get('options', []), is_missing
     
     def get_class_overrides(self, class_description: str) -> dict:
         """Get class-specific rule overrides."""
