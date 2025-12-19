@@ -1,0 +1,30 @@
+# AI Product Imagery Workflow Configuration
+
+# Model Configuration - USE ACTUAL API MODEL IDs
+models:
+  vision_analysis: "gemini-2.5-flash"           # For analyzing ghost images
+  image_generation: "gemini-3-pro-image-preview"      # Actual API model name. Options: gemini-2.0-flash-exp, imagen-3.0-generate-002
+
+# Image Generation Settings
+image_settings:
+  aspect_ratio: "1:1"
+  output_format: "jpg"
+  images_per_sku: 2
+  person_generation: "dont_allow"  # For firearms: no people visible
+
+# Output Configuration
+output:
+  base_path: "./output"
+  naming_pattern: "{tranche}/{cupidName}_l{counter}.jpg"
+  counter_start: 101
+  counter_max: 110
+
+# Data Source
+data:
+  csv_path: "./Sapient AI Model Working List - R1.5 121125_pimData_displayNames_20251215_233355.csv"
+
+# API Configuration (set via environment variable GEMINI_API_KEY)
+api:
+  max_retries: 3
+  retry_delay_seconds: 2
+  timeout_seconds: 60

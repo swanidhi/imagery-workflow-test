@@ -1,0 +1,21 @@
+# User Feedback Storage for AI Product Imagery
+# Add feedback entries below for each product
+
+feedback_entries: {}
+  # Example:
+  # 133162986_0_0_0_0:
+  #   rating: 3  # 1-5 scale
+  #   issues:
+  #     - "trigger guard not clearly visible"
+  #     - "lighting too dramatic"
+  #   suggestions:
+  #     - "use brighter ambient lighting"
+  #   regenerate: true
+
+# Aggregated learnings (auto-updated based on feedback patterns)
+rule_refinements: {}
+  # Example (auto-generated):
+  # handguns:
+  #   add_to_required:
+  #     - "clear visibility of safety features"
+  #   preferred_lighting: "bright ambient"

@@ -1,0 +1,13 @@
+# Requirements for AI Product Imagery Workflow
+
+# Data processing
+pandas>=2.0.0
+
+# Configuration
+pyyaml>=6.0
+
+# HTTP requests for fetching images
+requests>=2.28.0
+
+# Google Gemini API
+google-genai>=0.1.0

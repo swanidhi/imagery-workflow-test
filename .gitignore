@@ -1,0 +1,24 @@
+# Ignore large output files
+output/
+*.jpg
+*.png
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Environment
+.env
+
+# Node
+frontend/node_modules/
+
+# OS
+.DS_Store
+
+# Logs (optional - remove if you want to track logs)
+# output/logs/
+
+# Inspection scripts (development only)
+inspect_enrichment.py

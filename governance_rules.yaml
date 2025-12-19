@@ -1,0 +1,126 @@
+# Firearm Product Imagery Governance Rules
+
+# Universal Firearm Rules (apply to all products)
+universal:
+  negative_prompts:
+    # Safety - Human presence restrictions
+    - "finger on trigger"
+    - "human face"
+    - "recognizable facial features"
+    - "eyes visible"
+    - "children"
+    - "child hands"
+    - "small hands"
+    - "young person"
+    - "teenager"
+    - "minor"
+    - "juvenile"
+    # Safety - Action restrictions
+    - "active firing position"
+    - "pointed at camera or person"
+    - "combat scenario"
+    - "aggressive stance"
+    - "threatening pose"
+    - "aiming"
+    - "shooting"
+    # Violence/inappropriate context
+    - "violent imagery"
+    - "crowded public space"
+    - "military uniform"
+    - "police uniform"
+    - "blood or injury"
+    - "muzzle flash"
+    - "bullet trajectory"
+    - "crime scene"
+    - "urban street"
+    - "school"
+    - "protest"
+    - "conflict"
+  
+  required_elements:
+    - "product as primary focus"
+    - "neutral or display presentation"
+    - "high-quality studio or natural lighting"
+    - "photorealistic rendering"
+    - "clean background"
+    - "professional commercial photography style"
+    - "adult context only"
+    - "responsible ownership context"
+  
+  face_policy: "avoid_compositionally"  # Use angles/silhouettes, not blurring
+  
+  human_presence:
+    allowed: "hands_only"  # Options: none, hands_only, silhouette, partial_body
+    guidance: "Show only hands interacting with product if needed, never above wrist, no jewelry or distinctive features"
+
+# Scene Templates by Category
+scene_templates:
+  handguns:
+    lifestyle_1: "elegant display on weathered wooden desk surface, soft natural morning light through window, cleaning cloth and maintenance kit nearby, collector's presentation style, shallow depth of field"
+    lifestyle_2: "range bag context partially visible, professional training environment, ear protection nearby, shallow depth of field with product in sharp focus, clean indoor range aesthetic"
+  
+  rifles:
+    lifestyle_1: "hunting lodge setting, leaning against rustic log wall, amber evening light through window, leather accessories nearby, outdoorsman heritage aesthetic"
+    lifestyle_2: "precision shooting bench, bipod deployed on stable rest, target range backdrop softly blurred, dawn lighting, technical sport presentation"
+  
+  shotguns:
+    lifestyle_1: "waterfowl hunting context, tall grass marsh setting, dawn mist atmosphere, hunting vest draped nearby, outdoor heritage aesthetic, natural earthy tones"
+    lifestyle_2: "sporting clays station, break-open display position showing craftsmanship, blue skies background, competitive shooting atmosphere"
+  
+  revolvers:
+    lifestyle_1: "western heritage display, leather holster nearby, aged wood surface, warm tungsten lighting, americana collector aesthetic"
+    lifestyle_2: "precision display case with velvet lining, soft museum-quality lighting, heritage craftsmanship focus"
+  
+  modern_sporting_rifles:
+    lifestyle_1: "competition shooting bench, modular accessories visible, technical precision aesthetic, clean modern environment"
+    lifestyle_2: "secure display rack, professional training facility context, organized and methodical presentation"
+  
+  black_powder:
+    lifestyle_1: "historical display case, antique backdrop with period-appropriate props, warm museum lighting, heritage collector presentation"
+    lifestyle_2: "frontier cabin setting, natural materials, handcrafted aesthetic, traditional craftsmanship focus, soft natural lighting"
+
+# Class Description to Scene Category Mapping
+class_mapping:
+  "Handguns - Semi-Auto Centerfire": "handguns"
+  "Handguns - Semi-Auto Rimfire": "handguns"
+  "Handguns - Revolver/Single Centerfire": "revolvers"
+  "Handguns - Revolver Rimfire": "revolvers"
+  "Rifles - Center Fire": "rifles"
+  "Rifles - Rimfire": "rifles"
+  "Shotguns - Semi-Auto": "shotguns"
+  "Shotguns - Manual": "shotguns"
+  "Modern Sporting Rifles": "modern_sporting_rifles"
+  "Black Powder Guns": "black_powder"
+  "Other Firearms": "handguns"  # Default fallback
+  "Barrels & Uppers": "modern_sporting_rifles"  # Accessory context
+
+# Class-Specific Overrides (extend or override universal rules)
+class_overrides:
+  "Modern Sporting Rifles":
+    additional_negative_prompts:
+      - "military context"
+      - "tactical assault imagery"
+      - "urban combat setting"
+      - "camouflage pattern background"
+    preferred_elements:
+      - "sporting competition context"
+      - "precision accuracy focus"
+  
+  "Black Powder Guns":
+    additional_required_elements:
+      - "historical context"
+      - "heritage craftsmanship"
+      - "period-appropriate setting"
+    exempt_from:
+      - "modern lighting equipment visible"
+
+# Quality Standards (apply to all generated images)
+quality_standards:
+  - "photorealistic, not AI-looking"
+  - "physically accurate product proportions"
+  - "product grounded in scene, not floating"
+  - "consistent lighting and shadows"
+  - "no text or watermarks"
+  - "no logos other than product branding"
+  - "high dynamic range"
+  - "sharp focus on product"
